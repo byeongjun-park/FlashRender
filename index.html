@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>FlashRender</title>
+<meta name="description" content="FlashRender: Few-Step Generative Rendering via Camera-Controlled Video MeanFlow. Retakes a source video along a target camera trajectory in seconds using only 4-NFE.">
+<meta property="og:title" content="FlashRender: Few-Step Generative Rendering via Camera-Controlled Video MeanFlow">
+<meta property="og:description" content="Retakes a source video along a target camera trajectory in seconds using only 4-NFE, matching multi-step baselines at 25x lower sampling cost.">
+<meta property="og:image" content="files/teaser.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/css/style.css">
+
+<script>document.documentElement.classList.add('has-js');</script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#top">
+      <img src="img/favicon.png" alt="" width="26" height="26">
+      <span>FlashRender</span>
+    </a>
+    <div class="nav-links">
+      <a href="#motivation">Motivation</a>
+      <a href="#method">Method</a>
+      <a href="#analysis">Analysis</a>
+      <a href="#comparisons">Comparisons</a>
+      <a href="#trajectories">More Results</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <p class="hero-eyebrow reveal">arXiv &middot; 2026</p>
+    <h1 class="hero-title reveal"><span class="emoji">⚡️</span><span class="hero-title-text">FlashRender</span><span class="emoji">⚡️</span></h1>
+    <p class="hero-sub reveal">Few-Step Generative Rendering via Camera-Controlled Video MeanFlow</p>
+
+    <ul class="authors reveal">
+      <li><a href="https://byeongjun-park.github.io/" target="_blank" rel="noopener">Byeongjun Park</a><sup>1</sup></li>
+      <li><a href="https://naipl.cc/" target="_blank" rel="noopener">Byung-Hoon Kim</a><sup>1,2,&dagger;</sup></li>
+      <li><a href="https://hyungjin-chung.github.io/" target="_blank" rel="noopener">Hyungjin Chung</a><sup>1,3,&dagger;</sup></li>
+    </ul>
+    <p class="affil reveal"><sup>1</sup>EverEx &nbsp;&nbsp; <sup>2</sup>Yonsei University &nbsp;&nbsp; <sup>3</sup>Korea University</p>
+    <p class="affil affil--note reveal"><sup>&dagger;</sup>Corresponding authors</p>
+
+    <!-- TODO(FlashRender): fill in the arXiv link (arxiv.org/abs/…, still href="#") -->
+    <div class="btn-row reveal">
+      <a class="btn" href="#">
+        <svg class="icon-arxiv" aria-hidden="true" viewBox="0 0 74.492 100.25"><g><path d="M586.72,255.616a3.377,3.377,0,0,1,.448.031,5.917,5.917,0,0,1,3.581,2.79c.454,1.116.314,2.023-1.315,4.141L563.168,293.6l-8.558-10.047,29.348-26.616a4.406,4.406,0,0,1,2.762-1.321m0-1.5a5.766,5.766,0,0,0-3.69,1.643l-.041.032-.038.035L553.6,282.442l-1.077.977.943,1.107,8.558,10.047,1.145,1.344,1.141-1.348,26.267-31.022.022-.027.022-.028c1.574-2.046,2.327-3.622,1.516-5.619a7.309,7.309,0,0,0-4.779-3.714,5.083,5.083,0,0,0-.64-.043Z" transform="translate(-526.086 -245.559)" fill="currentColor"/><path d="M553.423,284.593l8.977,10.558L597.911,337.9c.873,1.093,1.419,2.186,1.047,3.418a4.092,4.092,0,0,1-2.721,2.837,3.557,3.557,0,0,1-1.045.159,4,4,0,0,1-2.687-1.124L548.01,300.808c-3.5-3.5-2.971-8.151.436-11.558l4.977-4.657m.124-2.17L552.4,283.5l-4.976,4.656c-4.192,4.191-4.372,9.816-.473,13.714l44.521,42.4a5.485,5.485,0,0,0,3.722,1.538,5.1,5.1,0,0,0,1.483-.224,5.59,5.59,0,0,0,3.719-3.838,5.176,5.176,0,0,0-1.31-4.788l-35.53-42.767-8.988-10.571-1.019-1.2Z" transform="translate(-526.086 -245.559)" fill="currentColor"/><path d="M562.4,295.151l9.556,11.5,5.761-5.356a7.926,7.926,0,0,0,.041-11.743l-43.7-41.923s-1.671-2.029-3.437-2.071a4.49,4.49,0,0,0-4.23,2.718c-.688,1.651-.194,2.809,1.315,4.97l29.306,35.565Z" transform="translate(-526.086 -245.559)" fill="currentColor"/><path d="M553.7,306.223l-17.116,21.024c-1.255,1.337-2.032,3.683-1.331,5.367a4.587,4.587,0,0,0,4.287,2.841,4.087,4.087,0,0,0,3.082-1.523l20.328-18.9Z" transform="translate(-526.086 -245.559)" fill="currentColor"/></g></svg>
+        arXiv
+      </a>
+      <a class="btn" href="files/FlashRender.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+        Paper
+      </a>
+      <a class="btn" href="https://huggingface.co/byeongjun-park/FlashRender" target="_blank" rel="noopener">
+        <svg class="icon-hf" viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="16.5" r="10.5" fill="#FFD21E"/>
+          <circle cx="12" cy="14.5" r="1.6" fill="#3A3A3A"/>
+          <circle cx="20" cy="14.5" r="1.6" fill="#3A3A3A"/>
+          <path d="M11 19.5a5.4 5.4 0 0 0 10 0" fill="none" stroke="#3A3A3A"
+                stroke-width="1.9" stroke-linecap="round"/>
+          <path d="M6.4 17.6c-1.5-.7-3.2.2-3.2 1.8 0 1.9 2 3.9 3.9 4.6" fill="#FF9D0B"/>
+          <path d="M25.6 17.6c1.5-.7 3.2.2 3.2 1.8 0 1.9-2 3.9-3.9 4.6" fill="#FF9D0B"/>
+        </svg>
+        Hugging Face
+      </a>
+      <a class="btn" href="https://github.com/byeongjun-park/FlashRender">
+        <svg class="icon-fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.05-.02-2.06-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.62-5.48 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.9-.01 3.29 0 .32.22.7.83.58A12 12 0 0 0 24 12.5C24 5.87 18.63.5 12 .5z"/></svg>
+        Code
+      </a>
+    </div>
+  </div>
+
+  <div class="wrap wrap--wide">
+    <figure class="media-card media-card--tldr reveal">
+      <img src="files/teaser.png" alt="Teaser figure" loading="eager">
+      <figcaption>
+        <strong>TL;DR</strong> — Given an <strong class="lbl-input">input video</strong> and a
+        target camera trajectory, FlashRender generates a high-quality
+        <strong class="lbl-target">target retake</strong> <strong class="lbl-fast">within seconds</strong>.
+      </figcaption>
+    </figure>
+
+    <div class="impact-grid">
+      <article class="impact-card reveal">
+        <span class="impact-figure">25&times;</span>
+        <h3>Lower sampling cost</h3>
+        <span class="impact-metric">NFE</span>
+        <p>4-NFE vs. 2&times;50-NFE baselines</p>
+      </article>
+      <article class="impact-card reveal">
+        <span class="impact-figure">+18%</span>
+        <h3>Better camera controllability</h3>
+        <span class="impact-metric">TransErr / RotErr</span>
+        <p>than even multi-step baselines</p>
+      </article>
+      <article class="impact-card reveal">
+        <span class="impact-figure">+14%</span>
+        <h3>Better geometric consistency</h3>
+        <span class="impact-metric">Dyn-MEt3R / MEt3R</span>
+        <p>than few-step baselines</p>
+      </article>
+      <article class="impact-card reveal">
+        <span class="impact-figure">+6.3%</span>
+        <h3>Better visual quality on OOD</h3>
+        <span class="impact-metric">VBench</span>
+        <p>than even multi-step baselines</p>
+      </article>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="section section--tint" id="motivation">
+  <div class="wrap wrap--wide">
+    <h2 class="sec-heading">Motivation</h2>
+    <p class="prose reveal">
+      Naive few-step sampling introduces <strong>discretization error</strong>, which manifests in generative rendering
+      as sampling-step-dependent camera motion.
+    </p>
+    <h3 class="sub-heading reveal">Camera motion changes with the sampling-step count</h3>
+    <p class="sec-lead reveal">
+      For the same scene and target camera trajectory, changing only the number of sampling steps can lead to
+      substantially different realized camera trajectories.
+    </p>
+
+    <!-- All three methods live in one stage: the twelve clips have to start together for
+         the step-by-step comparison to hold. -->
+    <div class="stage reveal">
+      <div class="stage-row">
+        <h3 class="row-label">ReCamMaster [ICCV'25]</h3>
+        <div class="tile-grid">
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/recammaster/2.mp4"></video></div>
+            <figcaption>2 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/recammaster/4.mp4"></video></div>
+            <figcaption>4 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/recammaster/8.mp4"></video></div>
+            <figcaption>8 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/recammaster/50.mp4"></video></div>
+            <figcaption>50 steps</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="stage-row">
+        <h3 class="row-label">ReDirector [CVPR'26]</h3>
+        <div class="tile-grid">
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/redirector/2.mp4"></video></div>
+            <figcaption>2 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/redirector/4.mp4"></video></div>
+            <figcaption>4 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/redirector/8.mp4"></video></div>
+            <figcaption>8 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/redirector/50.mp4"></video></div>
+            <figcaption>50 steps</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="stage-row">
+        <h3 class="row-label">GeoAlign [arXiv'26]</h3>
+        <div class="tile-grid">
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/geoalign/2.mp4"></video></div>
+            <figcaption>2 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/geoalign/4.mp4"></video></div>
+            <figcaption>4 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/geoalign/8.mp4"></video></div>
+            <figcaption>8 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/geoalign/50.mp4"></video></div>
+            <figcaption>50 steps</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+    </div>
+
+    <!-- Part two: distil while that inconsistency is still there and few-step falls apart. -->
+    <h3 class="sub-heading reveal">And distillation inherits the problem</h3>
+    <p class="sec-lead reveal">
+      Distill those models down to 4 steps, and performance degrades because their multi-step dynamics are difficult to approximate with only a few sampling steps.
+    </p>
+
+    <div class="stage reveal">
+      <div class="tile-grid">
+        <figure class="tile">
+          <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/redirector/50.mp4"></video></div>
+          <figcaption>ReDirector &middot; 2&times;50 NFE</figcaption>
+        </figure>
+        <figure class="tile is-warn">
+          <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/redirector-fs.mp4"></video></div>
+          <figcaption>ReDirector-FS &middot; 4 NFE</figcaption>
+        </figure>
+        <figure class="tile">
+          <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/geoalign/50.mp4"></video></div>
+          <figcaption>GeoAlign &middot; 2&times;50 NFE</figcaption>
+        </figure>
+        <figure class="tile is-warn">
+          <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/motivation/geoalign-fs.mp4"></video></div>
+          <figcaption>GeoAlign-FS &middot; 4 NFE</figcaption>
+        </figure>
+      </div>
+      <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+    </div>
+
+    <p class="prose reveal">
+      FlashRender starts by enforcing the consistent camera control. We find that this significantly lowers denoising
+      trajectory curvature, facilitating step distillation.
+    </p>
+  </div>
+</section>
+
+<section class="section" id="method">
+  <div class="wrap wrap--wide">
+    <h2 class="sec-heading">Method</h2>
+    <p class="sec-lead reveal">
+      FlashRender is fine-tuned from Wan2.1-1.3B-CamCtrl in three stages, each designed to address a distinct challenge in few-step generative rendering.
+    </p>
+
+    <figure class="media-card reveal">
+      <img src="files/overview.png" alt="Architecture overview" loading="lazy">
+    </figure>
+
+    <div class="step-grid">
+      <article class="step-card reveal">
+        <span class="step-num">1</span>
+        <h3>RETA</h3>
+        <span class="step-tagline"><span>Stabilize camera control across timesteps.</span><span>Reduce denoising trajectory curvature.</span></span>
+        <p>
+          Aligns intermediate source-video representations with target-view features from a frozen
+          VGGT encoder. This internalizes the geometric transformation, enabling consistent camera control and reducing the trajectory curvature.
+        </p>
+      </article>
+      <article class="step-card reveal">
+        <span class="step-num">2</span>
+        <h3>MeanFlow</h3>
+        <span class="step-tagline"><span>Shortcut the full denoising trajectory.</span><span>Mitigate discretization error.</span></span>
+        <p>
+          Building on the lower-curvature denoising trajectory induced by RETA, we fine-tune the multi-step model with the MeanFlow objective
+          to learn average velocity fields that shortcut the full denoising trajectory, effectively
+          mitigating discretization error.
+        </p>
+      </article>
+      <article class="step-card reveal">
+        <span class="step-num">3</span>
+        <h3>On-policy flow map distillation</h3>
+        <span class="step-tagline"><span>Address self-rollout errors.</span><span>Optimize under fixed few-step sampling.</span></span>
+        <p>
+          The MeanFlow model is rolled out using the same four-step schedule as inference and optimized on its own samples with DMD and an adversarial objective, correcting self-rollout errors caused by the training–inference mismatch.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint" id="analysis">
+  <div class="wrap wrap--wide">
+    <h2 class="sec-heading">Analysis on RETA</h2>
+    <p class="prose reveal">
+      With RETA, the realized camera trajectory remains consistent across sampling steps.
+    </p>
+
+    <!-- A single row does not really need a stage wrapper, but the scrubber and the
+         synchronised-playback code look for .stage, so it stays. -->
+    <div class="stage reveal">
+      <div class="stage-row">
+        <h3 class="row-label">FlashRender-MS (Stage 1) &middot; with RETA</h3>
+        <div class="tile-grid">
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/stages/ms/2.mp4"></video></div>
+            <figcaption>2 NFE</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/stages/ms/4.mp4"></video></div>
+            <figcaption>4 NFE</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/stages/ms/8.mp4"></video></div>
+            <figcaption>8 NFE</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/stages/ms/50.mp4"></video></div>
+            <figcaption>50 NFE</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+    </div>
+
+    <h3 class="sub-heading reveal">RETA flattens the denoising trajectory</h3>
+    <p class="sec-lead reveal">
+      A straighter denoising trajectory is easier to approximate with only a few steps, facilitating subsequent step distillation. 
+      RETA consistently lowers the curvature throughout the schedule, achieving the lowest curvature along all baselines.
+    </p>
+    <div class="charts reveal" data-curvature></div>
+    <p class="chart-note reveal">
+      <span class="chart-formula">C(t<sub>i</sub>) = ‖ (ẑ<sub>i</sub> &minus; ẑ<sub>i&minus;1</sub>) / (t<sub>i</sub> &minus; t<sub>i&minus;1</sub>) &minus; (X<sub>1</sub> &minus; X<sub>0</sub>) ‖<sub>2</sub><sup>2</sup></span>
+      — how far each denoising step veers from the straight line between noise
+      <span class="chart-formula">X<sub>1</sub></span> and data <span class="chart-formula">X<sub>0</sub></span>,
+      squared. A straighter denoising trajectory is easier to approximate with only a few steps.
+    </p>
+
+    <h3 class="sub-heading reveal">Lower-curvature trajectory makes MeanFlow training easier</h3>
+    <p class="sec-lead reveal">
+      RETA enables the MeanFlow model to more accurately shortcut the full denoising trajectory and effectively mitigate discretization error during few-step sampling.
+    </p>
+    <div class="charts reveal" data-charts></div>
+
+    <h3 class="sub-heading reveal">Accurate trajectory shortcutting enables better on-policy distillation</h3>
+    <p class="sec-lead reveal">
+      With RETA, video quality improves consistently across all three stages.
+      More accurate trajectory shortcutting in turn enables better on-policy distillation.
+    </p>
+    <div class="stage reveal">
+      <div class="stage-row">
+        <h3 class="row-label">without RETA</h3>
+        <div class="tile-grid tile-grid--trio">
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/reta-effect/noreta-ms.mp4"></video></div>
+            <figcaption>Stage 1 &middot; 4 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/reta-effect/noreta-stage2.mp4"></video></div>
+            <figcaption>Stage 2 &middot; 4 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/reta-effect/noreta-final.mp4"></video></div>
+            <figcaption>Stage 3 &middot; 4 steps</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="stage-row">
+        <h3 class="row-label">with RETA</h3>
+        <div class="tile-grid tile-grid--trio">
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/reta-effect/reta-ms.mp4"></video></div>
+            <figcaption>Stage 1 &middot; 4 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/reta-effect/reta-stage2.mp4"></video></div>
+            <figcaption>Stage 2 &middot; 4 steps</figcaption>
+          </figure>
+          <figure class="tile">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/reta-effect/reta-final.mp4"></video></div>
+            <figcaption>Stage 3 &middot; 4 steps</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+    </div>
+  </div>
+</section>
+
+<!--
+  Comparison section. One scene = one tab + one panel.
+  A tab's data-scene and a panel's data-scene-panel string are the pair.
+  Tile videos carry only data-src; the real src is filled in when that scene is selected.
+  To add a scene: one tab button and one panel block. The JS needs no changes.
+-->
+<section class="section" id="comparisons">
+  <div class="wrap wrap--wide">
+    <h2 class="sec-heading">Comparisons</h2>
+    <p class="sec-lead reveal">
+      Results on the DAVIS dataset — 50 source videos &times; 10 target trajectories.
+    </p>
+
+    <div class="table-scroll reveal">
+      <table class="results">
+        <thead>
+          <tr>
+            <th scope="col" rowspan="2">Method</th>
+            <th scope="col" colspan="2">Visual Quality</th>
+            <th scope="col" colspan="2">Geometric Consistency</th>
+            <th scope="col" colspan="2">Camera Accuracy</th>
+          </tr>
+          <tr>
+            <th scope="col">Aesthetic &uarr;</th>
+            <th scope="col">Imaging &uarr;</th>
+            <th scope="col">Dyn-MEt3R &uarr;</th>
+            <th scope="col">MEt3R &darr;</th>
+            <th scope="col">TransErr &darr;</th>
+            <th scope="col">RotErr &darr;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group"><th scope="rowgroup" colspan="7">Multi-step (2&times;50-NFE)</th></tr>
+          <tr><th scope="row">CogNVS</th><td>0.2160</td><td>0.4300</td><td>0.6845</td><td>0.4036</td><td>0.0768</td><td>10.878</td></tr>
+          <tr><th scope="row">TrajectoryCrafter</th><td>0.5046</td><td>0.6071</td><td>0.7338</td><td>0.3272</td><td>0.0697</td><td>9.115</td></tr>
+          <tr><th scope="row">Vista4D</th><td>0.5095</td><td>0.6527</td><td>0.7812</td><td>0.3123</td><td>0.0223</td><td>2.371</td></tr>
+          <tr><th scope="row">GCD</th><td>0.3998</td><td>0.4928</td><td>0.6898</td><td>0.4438</td><td>0.1062</td><td>22.853</td></tr>
+          <tr><th scope="row">ReCamMaster</th><td>0.5064</td><td>0.6461</td><td>0.7857</td><td>0.3472</td><td>0.0292</td><td>2.347</td></tr>
+          <tr><th scope="row">ReDirector</th><td>0.5149</td><td>0.6668</td><td>0.8477</td><td>0.3073</td><td>0.0165</td><td>1.666</td></tr>
+          <tr><th scope="row">GeoAlign</th><td><strong>0.5250</strong></td><td><strong>0.6683</strong></td><td><strong>0.8532</strong></td><td>0.3111</td><td>0.0149</td><td>1.495</td></tr>
+          <tr class="is-ours"><th scope="row">FlashRender-MS</th><td>0.5214</td><td>0.6625</td><td>0.8491</td><td><strong>0.3059</strong></td><td><strong>0.0143</strong></td><td><strong>1.486</strong></td></tr>
+          <tr class="group"><th scope="rowgroup" colspan="7">Few-step (4-NFE)</th></tr>
+          <tr><th scope="row">NeoVerse</th><td>0.5012</td><td><strong>0.6715</strong></td><td>0.7523</td><td>0.3619</td><td>0.0343</td><td>3.495</td></tr>
+          <tr><th scope="row">ReDirector-FS†</th><td>0.5038</td><td>0.6437</td><td>0.8351</td><td>0.3492</td><td>0.0179</td><td>1.746</td></tr>
+          <tr><th scope="row">GeoAlign-FS†</th><td>0.5083</td><td>0.6478</td><td>0.8465</td><td>0.3161</td><td>0.0158</td><td>1.528</td></tr>
+          <tr class="is-ours"><th scope="row">FlashRender</th><td><strong>0.5182</strong></td><td>0.6654</td><td><strong>0.8571</strong></td><td><strong>0.3071</strong></td><td><strong>0.0122</strong></td><td><strong>1.236</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="chart-note reveal">
+      Best per column within each group (multi-step / few-step) in <strong>bold</strong>.
+      FS&dagger; denotes few-step baselines built by applying our MeanFlow-based on-policy
+      flow map distillation.
+    </p>
+
+    <div class="charts reveal" data-runtime></div>
+    <p class="chart-note reveal">
+      Wall-clock time to render one video, measured for the video generative model only.
+    </p>
+
+    <h3 class="sub-heading reveal">Baseline comparisons</h3>
+    <p class="sec-lead reveal">
+      FlashRender and NeoVerse run at 4-NFE; other baselines use 2&times;50-NFE.
+    </p>
+
+    <div class="scenes reveal" data-scenes>
+      <div class="scene-panel" data-scene-panel="motorbike">
+        <div class="stage">
+          <div class="tile-grid">
+          <figure class="tile is-input">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motorbike/input.mp4"></video></div>
+            <figcaption>Input Video</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motorbike/trajectorycrafter.mp4"></video></div>
+            <figcaption>TrajectoryCrafter</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motorbike/cognvs.mp4"></video></div>
+            <figcaption>CogNVS</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motorbike/neoverse.mp4"></video></div>
+            <figcaption>NeoVerse</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motorbike/recammaster.mp4"></video></div>
+            <figcaption>ReCamMaster</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motorbike/redirector.mp4"></video></div>
+            <figcaption>ReDirector</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motorbike/geoalign.mp4"></video></div>
+            <figcaption>GeoAlign</figcaption>
+          </figure>
+          <figure class="tile is-ours">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motorbike/flashrender.mp4"></video></div>
+            <figcaption>FlashRender (Ours)</figcaption>
+          </figure>
+        </div>
+          <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+        </div>      </div>
+      <div class="scene-panel is-hidden" data-scene-panel="horsejump-high">
+        <div class="stage">
+          <div class="tile-grid">
+          <figure class="tile is-input">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/horsejump-high/input.mp4"></video></div>
+            <figcaption>Input Video</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/horsejump-high/trajectorycrafter.mp4"></video></div>
+            <figcaption>TrajectoryCrafter</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/horsejump-high/cognvs.mp4"></video></div>
+            <figcaption>CogNVS</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/horsejump-high/neoverse.mp4"></video></div>
+            <figcaption>NeoVerse</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/horsejump-high/recammaster.mp4"></video></div>
+            <figcaption>ReCamMaster</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/horsejump-high/redirector.mp4"></video></div>
+            <figcaption>ReDirector</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/horsejump-high/geoalign.mp4"></video></div>
+            <figcaption>GeoAlign</figcaption>
+          </figure>
+          <figure class="tile is-ours">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/horsejump-high/flashrender.mp4"></video></div>
+            <figcaption>FlashRender (Ours)</figcaption>
+          </figure>
+        </div>
+          <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+        </div>      </div>
+      <div class="scene-panel is-hidden" data-scene-panel="motocross-bumps">
+        <div class="stage">
+          <div class="tile-grid">
+          <figure class="tile is-input">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motocross-bumps/input.mp4"></video></div>
+            <figcaption>Input Video</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motocross-bumps/trajectorycrafter.mp4"></video></div>
+            <figcaption>TrajectoryCrafter</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motocross-bumps/cognvs.mp4"></video></div>
+            <figcaption>CogNVS</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motocross-bumps/neoverse.mp4"></video></div>
+            <figcaption>NeoVerse</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motocross-bumps/recammaster.mp4"></video></div>
+            <figcaption>ReCamMaster</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motocross-bumps/redirector.mp4"></video></div>
+            <figcaption>ReDirector</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motocross-bumps/geoalign.mp4"></video></div>
+            <figcaption>GeoAlign</figcaption>
+          </figure>
+          <figure class="tile is-ours">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/motocross-bumps/flashrender.mp4"></video></div>
+            <figcaption>FlashRender (Ours)</figcaption>
+          </figure>
+        </div>
+          <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+        </div>      </div>
+      <div class="scene-panel is-hidden" data-scene-panel="rollerblade">
+        <div class="stage">
+          <div class="tile-grid">
+          <figure class="tile is-input">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/rollerblade/input.mp4"></video></div>
+            <figcaption>Input Video</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/rollerblade/trajectorycrafter.mp4"></video></div>
+            <figcaption>TrajectoryCrafter</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/rollerblade/cognvs.mp4"></video></div>
+            <figcaption>CogNVS</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/rollerblade/neoverse.mp4"></video></div>
+            <figcaption>NeoVerse</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/rollerblade/recammaster.mp4"></video></div>
+            <figcaption>ReCamMaster</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/rollerblade/redirector.mp4"></video></div>
+            <figcaption>ReDirector</figcaption>
+          </figure>
+          <figure class="tile ">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/rollerblade/geoalign.mp4"></video></div>
+            <figcaption>GeoAlign</figcaption>
+          </figure>
+          <figure class="tile is-ours">
+            <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons/rollerblade/flashrender.mp4"></video></div>
+            <figcaption>FlashRender (Ours)</figcaption>
+          </figure>
+        </div>
+          <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+        </div>      </div>
+
+      <div class="scene-tabs" role="tablist" aria-label="Comparison scenes">
+        <button class="scene-tab is-active" role="tab" aria-selected="true" data-scene="motorbike" aria-label="Motorbike, Translate Down">
+          <img src="files/comparisons/motorbike/thumb.jpg" alt="" loading="lazy">
+          <span class="scene-tab-label">Translate Down</span>
+        </button>
+        <button class="scene-tab" role="tab" aria-selected="false" data-scene="horsejump-high" aria-label="Horsejump High, Tilt Down">
+          <img src="files/comparisons/horsejump-high/thumb.jpg" alt="" loading="lazy">
+          <span class="scene-tab-label">Tilt Down</span>
+        </button>
+        <button class="scene-tab" role="tab" aria-selected="false" data-scene="motocross-bumps" aria-label="Motocross Bumps, Translate Up">
+          <img src="files/comparisons/motocross-bumps/thumb.jpg" alt="" loading="lazy">
+          <span class="scene-tab-label">Translate Up</span>
+        </button>
+        <button class="scene-tab" role="tab" aria-selected="false" data-scene="rollerblade" aria-label="Rollerblade, Arc Left">
+          <img src="files/comparisons/rollerblade/thumb.jpg" alt="" loading="lazy">
+          <span class="scene-tab-label">Arc Left</span>
+        </button>
+      </div>
+    </div>
+
+    <h3 class="sub-heading reveal">Few-step comparisons</h3>
+    <p class="sec-lead reveal">
+      All models use 4 sampling steps, while ReDirector and GeoAlign use double the NFE due to CFG guidance. FS&dagger; uses our MeanFlow-based on-policy distillation.
+    </p>
+
+    <div class="scenes reveal" data-scenes>
+      <div class="scene-panel" data-scene-panel="swing">
+        <div class="stage">
+          <div class="stage-row">
+            <h3 class="row-label">Sampled directly at 4 steps</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile is-input">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/swing/input.mp4"></video></div>
+                <figcaption>Input Video</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/swing/redirector.mp4"></video></div>
+                <figcaption>ReDirector</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/swing/geoalign.mp4"></video></div>
+                <figcaption>GeoAlign</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-row">
+            <h3 class="row-label">Distilled to 4 steps with our method</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/swing/redirector-fs.mp4"></video></div>
+                <figcaption>ReDirector-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/swing/geoalign-fs.mp4"></video></div>
+                <figcaption>GeoAlign-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile is-ours">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/swing/flashrender.mp4"></video></div>
+                <figcaption>FlashRender (Ours)</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+        </div>
+      </div>
+      <div class="scene-panel is-hidden" data-scene-panel="breakdance-flare">
+        <div class="stage">
+          <div class="stage-row">
+            <h3 class="row-label">Sampled directly at 4 steps</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile is-input">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/breakdance-flare/input.mp4"></video></div>
+                <figcaption>Input Video</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/breakdance-flare/redirector.mp4"></video></div>
+                <figcaption>ReDirector</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/breakdance-flare/geoalign.mp4"></video></div>
+                <figcaption>GeoAlign</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-row">
+            <h3 class="row-label">Distilled to 4 steps with our method</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/breakdance-flare/redirector-fs.mp4"></video></div>
+                <figcaption>ReDirector-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/breakdance-flare/geoalign-fs.mp4"></video></div>
+                <figcaption>GeoAlign-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile is-ours">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/breakdance-flare/flashrender.mp4"></video></div>
+                <figcaption>FlashRender (Ours)</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+        </div>
+      </div>
+      <div class="scene-panel is-hidden" data-scene-panel="dance-jump">
+        <div class="stage">
+          <div class="stage-row">
+            <h3 class="row-label">Sampled directly at 4 steps</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile is-input">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/dance-jump/input.mp4"></video></div>
+                <figcaption>Input Video</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/dance-jump/redirector.mp4"></video></div>
+                <figcaption>ReDirector</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/dance-jump/geoalign.mp4"></video></div>
+                <figcaption>GeoAlign</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-row">
+            <h3 class="row-label">Distilled to 4 steps with our method</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/dance-jump/redirector-fs.mp4"></video></div>
+                <figcaption>ReDirector-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/dance-jump/geoalign-fs.mp4"></video></div>
+                <figcaption>GeoAlign-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile is-ours">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/dance-jump/flashrender.mp4"></video></div>
+                <figcaption>FlashRender (Ours)</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+        </div>
+      </div>
+      <div class="scene-panel is-hidden" data-scene-panel="cows">
+        <div class="stage">
+          <div class="stage-row">
+            <h3 class="row-label">Sampled directly at 4 steps</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile is-input">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/cows/input.mp4"></video></div>
+                <figcaption>Input Video</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/cows/redirector.mp4"></video></div>
+                <figcaption>ReDirector</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/cows/geoalign.mp4"></video></div>
+                <figcaption>GeoAlign</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-row">
+            <h3 class="row-label">Distilled to 4 steps with our method</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/cows/redirector-fs.mp4"></video></div>
+                <figcaption>ReDirector-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/cows/geoalign-fs.mp4"></video></div>
+                <figcaption>GeoAlign-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile is-ours">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/cows/flashrender.mp4"></video></div>
+                <figcaption>FlashRender (Ours)</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+        </div>
+      </div>
+      <div class="scene-panel is-hidden" data-scene-panel="elephant">
+        <div class="stage">
+          <div class="stage-row">
+            <h3 class="row-label">Sampled directly at 4 steps</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile is-input">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/elephant/input.mp4"></video></div>
+                <figcaption>Input Video</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/elephant/redirector.mp4"></video></div>
+                <figcaption>ReDirector</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/elephant/geoalign.mp4"></video></div>
+                <figcaption>GeoAlign</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-row">
+            <h3 class="row-label">Distilled to 4 steps with our method</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/elephant/redirector-fs.mp4"></video></div>
+                <figcaption>ReDirector-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/elephant/geoalign-fs.mp4"></video></div>
+                <figcaption>GeoAlign-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile is-ours">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/elephant/flashrender.mp4"></video></div>
+                <figcaption>FlashRender (Ours)</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+        </div>
+      </div>
+      <div class="scene-panel is-hidden" data-scene-panel="tennis">
+        <div class="stage">
+          <div class="stage-row">
+            <h3 class="row-label">Sampled directly at 4 steps</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile is-input">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/tennis/input.mp4"></video></div>
+                <figcaption>Input Video</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/tennis/redirector.mp4"></video></div>
+                <figcaption>ReDirector</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/tennis/geoalign.mp4"></video></div>
+                <figcaption>GeoAlign</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-row">
+            <h3 class="row-label">Distilled to 4 steps with our method</h3>
+            <div class="tile-grid tile-grid--trio">
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/tennis/redirector-fs.mp4"></video></div>
+                <figcaption>ReDirector-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/tennis/geoalign-fs.mp4"></video></div>
+                <figcaption>GeoAlign-FS&dagger;</figcaption>
+              </figure>
+              <figure class="tile is-ours">
+                <div class="tile-media"><video muted loop playsinline preload="none" data-src="files/comparisons-fewstep/tennis/flashrender.mp4"></video></div>
+                <figcaption>FlashRender (Ours)</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+        </div>
+      </div>
+
+      <div class="scene-tabs" role="tablist" aria-label="Few-step comparison scenes">
+        <button class="scene-tab is-active" role="tab" aria-selected="true" data-scene="swing" aria-label="Swing, Pan Right">
+          <img src="files/comparisons-fewstep/swing/thumb.jpg" alt="" loading="lazy">
+          <span class="scene-tab-label">Pan Right</span>
+        </button>
+        <button class="scene-tab" role="tab" aria-selected="false" data-scene="breakdance-flare" aria-label="Breakdance Flare, Arc Left">
+          <img src="files/comparisons-fewstep/breakdance-flare/thumb.jpg" alt="" loading="lazy">
+          <span class="scene-tab-label">Arc Left</span>
+        </button>
+        <button class="scene-tab" role="tab" aria-selected="false" data-scene="dance-jump" aria-label="Dance Jump, Zoom Out">
+          <img src="files/comparisons-fewstep/dance-jump/thumb.jpg" alt="" loading="lazy">
+          <span class="scene-tab-label">Zoom Out</span>
+        </button>
+        <button class="scene-tab" role="tab" aria-selected="false" data-scene="cows" aria-label="Cows, Tilt Up">
+          <img src="files/comparisons-fewstep/cows/thumb.jpg" alt="" loading="lazy">
+          <span class="scene-tab-label">Tilt Up</span>
+        </button>
+        <button class="scene-tab" role="tab" aria-selected="false" data-scene="elephant" aria-label="Elephant, Arc Right">
+          <img src="files/comparisons-fewstep/elephant/thumb.jpg" alt="" loading="lazy">
+          <span class="scene-tab-label">Arc Right</span>
+        </button>
+        <button class="scene-tab" role="tab" aria-selected="false" data-scene="tennis" aria-label="Tennis, Translate Down">
+          <img src="files/comparisons-fewstep/tennis/thumb.jpg" alt="" loading="lazy">
+          <span class="scene-tab-label">Translate Down</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint" id="trajectories">
+  <div class="wrap wrap--wide">
+    <h2 class="sec-heading">More results</h2>
+    <p class="sec-lead reveal">
+      The same input video retaken by <strong>FlashRender</strong> following ten target trajectories
+      of the evaluation protocol. Trajectory and scene are chosen independently.
+    </p>
+    <div class="traj reveal" data-traj-explorer>
+      <div class="stage">
+        <div class="tile-grid tile-grid--pair">
+        <figure class="tile is-input">
+          <div class="tile-media"><video muted loop playsinline preload="none" data-role="input"></video></div>
+          <figcaption>Input Video</figcaption>
+        </figure>
+        <figure class="tile is-ours">
+          <div class="tile-media"><video muted loop playsinline preload="none" data-role="output"></video></div>
+          <figcaption>FlashRender (Ours) &middot; <span data-traj-name>Pan Right</span></figcaption>
+        </figure>
+      </div>
+        <div class="stage-status" data-status hidden><span class="spinner" aria-hidden="true"></span>Loading…</div>
+      </div>
+      <div class="picker">
+        <div class="chip-row" role="tablist" aria-label="Camera trajectory">
+          <button class="chip is-active" role="tab" aria-selected="true" data-traj="pan-right">Pan Right</button>
+          <button class="chip" role="tab" aria-selected="false" data-traj="pan-left">Pan Left</button>
+          <button class="chip" role="tab" aria-selected="false" data-traj="tilt-up">Tilt Up</button>
+          <button class="chip" role="tab" aria-selected="false" data-traj="tilt-down">Tilt Down</button>
+          <button class="chip" role="tab" aria-selected="false" data-traj="zoom-in">Zoom In</button>
+          <button class="chip" role="tab" aria-selected="false" data-traj="zoom-out">Zoom Out</button>
+          <button class="chip" role="tab" aria-selected="false" data-traj="translate-up">Translate Up</button>
+          <button class="chip" role="tab" aria-selected="false" data-traj="translate-down">Translate Down</button>
+          <button class="chip" role="tab" aria-selected="false" data-traj="arc-left">Arc Left</button>
+          <button class="chip" role="tab" aria-selected="false" data-traj="arc-right">Arc Right</button>
+        </div>
+      </div>
+
+      <div class="picker">
+        <div class="scene-tabs" role="tablist" aria-label="Scene">
+          <button class="scene-tab is-active" role="tab" aria-selected="true" data-traj-scene="la-la-land" aria-label="La La Land">
+            <img src="files/trajectories/la-la-land/thumb.jpg" alt="" loading="lazy">
+          </button>
+          <button class="scene-tab" role="tab" aria-selected="false" data-traj-scene="joker" aria-label="Joker">
+            <img src="files/trajectories/joker/thumb.jpg" alt="" loading="lazy">
+          </button>
+          <button class="scene-tab" role="tab" aria-selected="false" data-traj-scene="forrest-gump" aria-label="Forrest Gump">
+            <img src="files/trajectories/forrest-gump/thumb.jpg" alt="" loading="lazy">
+          </button>
+          <button class="scene-tab" role="tab" aria-selected="false" data-traj-scene="scent-of-a-woman" aria-label="Scent of a Woman">
+            <img src="files/trajectories/scent-of-a-woman/thumb.jpg" alt="" loading="lazy">
+          </button>
+          <button class="scene-tab" role="tab" aria-selected="false" data-traj-scene="mammoths" aria-label="Mammoths">
+            <img src="files/trajectories/mammoths/thumb.jpg" alt="" loading="lazy">
+          </button>
+          <button class="scene-tab" role="tab" aria-selected="false" data-traj-scene="chess-monkey" aria-label="Chess-playing monkey">
+            <img src="files/trajectories/chess-monkey/thumb.jpg" alt="" loading="lazy">
+          </button>
+          <button class="scene-tab" role="tab" aria-selected="false" data-traj-scene="sumo-buddha" aria-label="Sumo Buddha">
+            <img src="files/trajectories/sumo-buddha/thumb.jpg" alt="" loading="lazy">
+          </button>
+          <button class="scene-tab" role="tab" aria-selected="false" data-traj-scene="girl-with-orange" aria-label="Girl with an orange">
+            <img src="files/trajectories/girl-with-orange/thumb.jpg" alt="" loading="lazy">
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="bibtex">
+  <div class="wrap">
+    <h2 class="sec-heading">BibTeX</h2>
+    <div class="bibtex-card reveal">
+      <button class="copy-btn" data-copy aria-label="Copy BibTeX">Copy</button>
+      <!-- TODO(FlashRender): fill in the journal line once the arXiv number is out -->
+      <pre><code>@article{park2026flashrender,
+  title   = {FlashRender: Few-Step Generative Rendering via
+             Camera-Controlled Video MeanFlow},
+  author  = {Park, Byeongjun and Kim, Byung-Hoon and Chung, Hyungjin},
+  journal = {arXiv preprint arXiv:XXXX.XXXXX},
+  year    = {2026}
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <a class="foot-logo" href="https://everex.co.kr" aria-label="EverEx">
+      <img src="img/logo.png" alt="EverEx">
+    </a>
+    <p class="foot-note">
+      &copy; 2026 EverEx
+    </p>
+  </div>
+</footer>
+
+<script src="static/js/main.js"></script>
+<script src="static/js/charts.js"></script>
+</body>
+</html>

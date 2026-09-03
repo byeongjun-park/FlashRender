@@ -1,0 +1,804 @@
+/* ==========================================================================
+   FlashRender — project page
+   A light theme with EverEx teal (#07BEB8) as the single accent.
+   No framework. This one file is everything.
+   ========================================================================== */
+
+:root {
+  /* The teal from the EverEx logo. On white it only reaches 2.2:1, too weak for body
+     text, so it is used as a fill only; text uses --accent-ink. */
+  --accent:      #07BEB8;
+  --accent-600:  #05A29D;
+  --accent-ink:  #046F6B;
+  --accent-wash: #E6F7F6;
+
+  --bg:        #FFFFFF;
+  --tint:      #F5FBFA;
+  --surface:   #FFFFFF;
+  --text:      #101A19;
+  --text-soft: #4C5A58;
+  --text-mute: #7B8988;
+  --border:    #E3ECEB;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --shadow-1: 0 1px 2px rgba(16, 40, 38, .04), 0 4px 16px rgba(16, 40, 38, .05);
+  --shadow-2: 0 2px 6px rgba(16, 40, 38, .05), 0 18px 44px rgba(16, 40, 38, .09);
+
+  --nav-h: 62px;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  /* Keep headings clear of the sticky nav when jumping to an anchor. */
+  scroll-padding-top: calc(var(--nav-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, video { max-width: 100%; height: auto; display: block; }
+a { color: var(--accent-ink); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.wrap { width: min(100% - 40px, 760px); margin-inline: auto; }
+.wrap--wide { width: min(100% - 40px, 1060px); }
+
+/* --------------------------------------------------------------- nav ---- */
+
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  height: var(--nav-h);
+  background: rgba(255, 255, 255, .82);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+}
+.nav.is-stuck { border-bottom-color: var(--border); box-shadow: 0 1px 12px rgba(16, 40, 38, .04); }
+
+.nav-inner {
+  width: min(100% - 40px, 1060px); margin-inline: auto; height: 100%;
+  display: flex; align-items: center; gap: 24px;
+}
+
+.nav-brand {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 800; letter-spacing: -.02em; font-size: 16px;
+  color: var(--text); flex: none;
+}
+.nav-brand img { width: 26px; height: 26px; display: block; }
+.nav-brand:hover { text-decoration: none; color: var(--accent-ink); }
+
+.nav-links {
+  display: flex; gap: 4px; margin-left: auto;
+  overflow-x: auto; scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+
+.nav-links a {
+  position: relative;
+  padding: 6px 11px; border-radius: 7px;
+  font-size: 14px; font-weight: 500; white-space: nowrap;
+  color: var(--text-soft);
+  transition: color .16s var(--ease), background-color .16s var(--ease);
+}
+.nav-links a:hover { color: var(--text); background: var(--accent-wash); text-decoration: none; }
+.nav-links a.is-current { color: var(--accent-ink); background: var(--accent-wash); }
+
+/* -------------------------------------------------------------- hero ---- */
+
+.hero {
+  position: relative;
+  /* This bottom margin adds to the next section's top margin, so keep it small. */
+  padding: clamp(48px, 8vw, 88px) 0 clamp(14px, 1.8vw, 22px);
+  text-align: center;
+  overflow: hidden;
+}
+/* A very faint teal glow along the top. */
+.hero::before {
+  content: '';
+  position: absolute; inset: -40% 0 auto 0; height: 420px;
+  background: radial-gradient(60% 100% at 50% 0%, rgba(7, 190, 184, .14), transparent 70%);
+  pointer-events: none;
+}
+.hero > * { position: relative; }
+
+.hero-eyebrow {
+  margin: 0 0 14px;
+  font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
+.hero-title {
+  margin: 0;
+  font-size: clamp(40px, 7vw, 68px);
+  font-weight: 800; letter-spacing: -.035em; line-height: 1.05;
+  color: var(--text);
+}
+/* The gradient applies to the text only. background-clip:text on the whole h1 would
+   paint over the colour emoji as well and strip their own colours. */
+.hero-title-text {
+  background: linear-gradient(180deg, var(--text) 30%, #33514E);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+}
+/* Let emoji render in the colours the font gives them. */
+.hero-title .emoji {
+  color: initial;
+  -webkit-text-fill-color: initial;
+}
+
+.hero-sub {
+  /* The subtitle should sit on one line on wide screens: drop max-width and tie the
+     font size to the viewport so it never wraps to two lines. */
+  margin: 16px auto 0;
+  font-size: clamp(15px, 1.72vw, 21px);
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+.authors {
+  list-style: none; margin: 30px 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 20px;
+  font-size: 17px; font-weight: 500;
+}
+.authors a { color: var(--text); }
+.authors a:hover { color: var(--accent-ink); }
+.authors sup { color: var(--accent-ink); font-size: .7em; margin-left: 1px; }
+
+.affil { margin: 10px 0 0; font-size: 15px; color: var(--text-mute); }
+.affil sup { color: var(--accent-ink); }
+/* Corresponding-author note - one step quieter than the affiliation line. */
+.affil--note { margin-top: 4px; font-size: 14px; }
+
+.btn-row {
+  margin-top: 30px;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  height: 46px; padding: 0 20px 0 15px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text); font-size: 14.5px; font-weight: 600;
+  box-shadow: var(--shadow-1);
+  transition: transform .16s var(--ease), box-shadow .16s var(--ease),
+              border-color .16s var(--ease), background-color .16s var(--ease);
+}
+.btn:hover {
+  text-decoration: none; transform: translateY(-1px);
+  border-color: #C9DEDC; box-shadow: var(--shadow-2);
+}
+.btn svg {
+  /* More than half the 46px button height, so it fills the pill. */
+  width: 25px; height: 25px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* Icons drawn as solid fills, like brand marks. */
+.btn svg.icon-fill { fill: currentColor; stroke: none; }
+/* The Hugging Face mark keeps its own colours - exempt it from the currentColor rule. */
+.btn svg.icon-hf { width: 32px; height: 32px; fill: none; stroke: none; }
+/* The official arXiv logomark: a tall 74:100 ratio, so width is set separately, in Cornell red. */
+.btn svg.icon-arxiv {
+  width: 19px; height: 26px;
+  fill: currentColor; stroke: none;
+  color: #B31B1B;
+}
+
+/* ---------------------------------------------------------- sections ---- */
+
+.section { padding: clamp(48px, 7vw, 80px) 0; }
+/* Tighten the top of the section right after the hero so it does not drift from the teaser. */
+#motivation { padding-top: clamp(34px, 4vw, 48px); }
+.section--tint {
+  background: var(--tint);
+  border-block: 1px solid var(--border);
+}
+
+.sec-heading {
+  margin: 0 0 8px;
+  font-size: clamp(24px, 3.4vw, 32px);
+  font-weight: 700; letter-spacing: -.025em;
+}
+/* A short teal underline beneath the heading. */
+.sec-heading::after {
+  content: ''; display: block; margin-top: 12px;
+  width: 40px; height: 3px; border-radius: 2px;
+  background: var(--accent);
+}
+
+.sec-lead {
+  margin: 20px 0 0; max-width: 640px;
+  color: var(--text-soft); font-size: 16px;
+}
+
+/* Keep lines from running too long even inside a wide section (wrap--wide). */
+.prose { margin: 24px 0 0; max-width: 720px; color: var(--text-soft); }
+
+/* ------------------------------------------------------------- media ---- */
+
+.media-card {
+  margin: 28px 0 0;
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px;
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+.media-card img { width: 100%; }
+.media-card figcaption {
+  padding: 14px 18px;
+  border-top: 1px solid var(--border);
+  font-size: 14.5px; color: var(--text-mute);
+}
+
+/* --------------------------------------------------------- TL;DR ------- */
+
+/* The teaser caption is a one-line summary, so it is larger and heavier than a normal caption. */
+.media-card--tldr figcaption {
+  padding: 16px 20px;
+  font-size: 15.5px; line-height: 1.6;
+  color: var(--text-soft); text-align: left;
+}
+.media-card--tldr figcaption strong { color: var(--text); font-weight: 650; }
+/* Reuse the label colours from the teaser figure (#EB4234 / #4085F5 sampled from it,
+   darkened slightly so they stay readable at body-text size). */
+.media-card--tldr figcaption .lbl-input  { color: #D9291A; }
+.media-card--tldr figcaption .lbl-target { color: #1B63D6; }
+/* The orange of the bolt and the 5s/10s/21s figures, #F97215. The raw colour only hits
+   2.8:1 on white and reads faint in text, so the hue is kept and contrast lifted to 3.3:1. */
+.media-card--tldr figcaption .lbl-fast   { color: #E8690F; }
+/* Reuse the label colours from the teaser figure (sampled: #EB4234 / #4085F5). */
+.lbl-input  { color: #D9291A; }
+.lbl-target { color: #1B63D6; }
+
+/* --------------------------------------------------------- impact ------ */
+
+.impact-grid {
+  margin-top: 16px;
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(4, 1fr);
+  text-align: left;
+}
+.impact-card {
+  padding: 18px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px;
+  box-shadow: var(--shadow-1);
+}
+.impact-figure {
+  display: block;
+  font-size: 25px; font-weight: 800; letter-spacing: -.03em; line-height: 1.1;
+  color: var(--accent-ink);
+}
+.impact-card h3 {
+  margin: 9px 0 3px;
+  font-size: 15px; font-weight: 700; letter-spacing: -.01em;
+}
+/* Which metric the figure was measured with - small, right under the heading. */
+.impact-metric {
+  display: block; margin-bottom: 7px;
+  font-size: 12px; font-weight: 600; letter-spacing: .01em;
+  color: var(--accent-ink);
+}
+.impact-card p { margin: 0; font-size: 14px; color: var(--text-soft); }
+
+/* ------------------------------------------------------- method steps --- */
+
+.step-grid {
+  margin-top: 24px;
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.step-card {
+  padding: 22px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px;
+}
+.step-num {
+  display: inline-grid; place-items: center;
+  width: 32px; height: 32px; border-radius: 9px;
+  background: var(--accent-wash); color: var(--accent-ink);
+  font-size: 15px; font-weight: 700;
+}
+.step-card h3 { margin: 12px 0 4px; font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+/* One line on what the stage solves - a bridge between heading and body. */
+.step-tagline {
+  display: block; margin-bottom: 8px;
+  font-size: 12px; font-weight: 600; line-height: 1.45;
+  color: var(--accent-ink);
+}
+/* Each clause on its own line, split exactly where the slash was.
+   Font size 12px: at 13px the long clause on the third card wrapped to three lines. */
+.step-tagline > span { display: block; }
+.step-card p { margin: 0; font-size: 15px; color: var(--text-soft); }
+
+/* ---------------------------------------------------- scene compare ---- */
+
+.scenes { margin-top: 26px; }
+
+.scene-panel.is-hidden { display: none; }
+
+/* The loading overlay laid over the grid. Everything waits here until all clips are ready. */
+.stage { position: relative; }
+
+.stage-status {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: rgba(255, 255, 255, .72);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: 12px;
+  font-size: 14px; font-weight: 600; color: var(--text-soft);
+  z-index: 2;
+}
+.stage-status[hidden] { display: none; }
+
+.spinner {
+  width: 19px; height: 19px; border-radius: 50%;
+  border: 2px solid var(--accent-wash);
+  border-top-color: var(--accent);
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.tile-grid {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.tile { margin: 0; }
+
+.tile-media {
+  position: relative;
+  background: #0C1413;
+  border: 1px solid var(--border); border-radius: 12px;
+  overflow: hidden;
+  /* Every tile is the same box, so the layout does not jump before metadata arrives. */
+  aspect-ratio: 26 / 15;
+}
+/* Source aspect ratios vary (832x480, 672x384, 832x512, 384x256).
+   cover fills the box so tiles never look mismatched in size. */
+.tile-media video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tile figcaption {
+  margin-top: 9px;
+  font-size: 13.5px; font-weight: 550; color: var(--text-soft);
+  text-align: center;
+}
+
+/* Mark the input and our own result clearly apart from the rest. */
+.tile.is-ours .tile-media { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-wash); }
+.tile.is-ours figcaption { color: var(--accent-ink); font-weight: 700; }
+.tile.is-input .tile-media { border-color: #C9DEDC; }
+.tile.is-input figcaption { color: var(--text); font-weight: 650; }
+
+/* --- Scene picker: below the grid, centred --- */
+
+.scene-tabs {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+  margin-top: 30px;
+}
+/* A button is the first frame of that scene's input video, with the label laid over it. */
+.scene-tab {
+  position: relative;
+  display: block; padding: 4px; border-radius: 14px;
+  border: 1px solid var(--border); background: var(--surface);
+  font: inherit; line-height: 0;
+  cursor: pointer;
+  transition: transform .15s var(--ease), box-shadow .15s var(--ease),
+              background-color .15s var(--ease), border-color .15s var(--ease);
+}
+.scene-tab img {
+  /* The same 26:15 ratio as the tiles. */
+  width: 130px; height: 75px; display: block;
+  object-fit: cover; border-radius: 10px;
+  background: #0C1413;
+}
+/* Trajectory name - over a gradient scrim along the bottom of the frame. */
+.scene-tab-label {
+  position: absolute; left: 4px; right: 4px; bottom: 4px;
+  padding: 16px 8px 6px;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(to top, rgba(6, 20, 19, .82), rgba(6, 20, 19, 0));
+  color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+  font-size: 13px; font-weight: 650; line-height: 1.2;
+  text-align: center; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.scene-tab:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent); box-shadow: var(--shadow-1);
+}
+.scene-tab.is-active {
+  background: var(--accent); border-color: var(--accent);
+  box-shadow: 0 8px 22px rgba(7, 190, 184, .28);
+}
+.scene-tab:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+/* ------------------------------------------------ motivation demos ----- */
+
+.sub-heading {
+  margin: 44px 0 0;
+  font-size: 19px; font-weight: 700; letter-spacing: -.015em;
+}
+.sub-heading + .sec-lead { margin-top: 10px; }
+
+.stage + .prose { margin-top: 28px; }
+.prose + .stage, .sec-lead + .stage { margin-top: 26px; }
+
+/* Several rows inside one stage - grouped together because they must start in sync.
+   With two or three rows the default spacing runs too tall, so it is tightened. */
+.stage-row + .stage-row { margin-top: 14px; }
+.row-label {
+  margin: 0 0 7px;
+  font-size: 14.5px; font-weight: 700; letter-spacing: .01em;
+  color: var(--accent-ink);
+}
+.stage-row .tile-grid { margin-top: 0; gap: 8px; }
+.stage-row .tile figcaption { margin-top: 5px; font-size: 13px; }
+
+/* ------------------------------------------------------ results table -- */
+
+/* The table is wider than the screen. Wrap it so the table scrolls, not the page. */
+.table-scroll { overflow-x: auto; margin-top: 24px; }
+
+.results {
+  width: 100%; min-width: 720px;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: 12px;
+  overflow: hidden;
+}
+.results th, .results td {
+  padding: 8px 12px;
+  font-size: 13px; text-align: center;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid var(--border);
+}
+.results thead th {
+  font-weight: 650; color: var(--text-soft);
+  text-align: center; white-space: nowrap;
+  background: var(--tint);
+}
+.results thead tr:first-child th { border-bottom: 1px solid var(--border); }
+.results thead tr:first-child th:first-child { text-align: left; }
+.results .unit { font-weight: 500; font-size: 11px; color: var(--text-mute); }
+
+/* Only the row name (Method) is left-aligned, setting it apart from the number columns. */
+.results tbody th { text-align: left; font-weight: 550; white-space: nowrap; }
+
+/* Sub-group headings inside the table. */
+.results tr.group th {
+  padding-top: 12px;
+  text-align: left; font-size: 12px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase;
+  color: var(--text-mute); background: transparent;
+}
+
+.results tbody tr.is-ours { background: var(--accent-wash); }
+.results tbody tr.is-ours th { color: var(--accent-ink); font-weight: 700; }
+.results tbody tr:last-child th, .results tbody tr:last-child td { border-bottom: 0; }
+.results strong { font-weight: 700; color: var(--text); }
+
+/* --------------------------------------------------- frame scrubber ---- */
+
+.scrub {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 12px;
+}
+.scrub-toggle {
+  width: 30px; height: 30px; flex: none;
+  border: 1px solid var(--border); border-radius: 50%;
+  background: var(--surface); cursor: pointer;
+  position: relative;
+}
+.scrub-toggle:hover { border-color: var(--accent); }
+.scrub-toggle:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+/* Draw play/pause as shapes rather than glyphs, so the form does not shift with the font. */
+.scrub-toggle::before {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  transform: translate(-40%, -50%);
+  border-left: 9px solid var(--accent-ink);
+  border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+}
+.scrub-toggle.is-playing::before {
+  transform: translate(-50%, -50%);
+  border: 0; width: 3px; height: 11px;
+  background: var(--accent-ink);
+  box-shadow: 5px 0 0 var(--accent-ink);
+  margin-left: -2.5px;
+}
+
+.scrub-range {
+  flex: 1; height: 4px; -webkit-appearance: none; appearance: none;
+  border-radius: 999px; cursor: pointer;
+  background: linear-gradient(to right, var(--accent) var(--pct, 0%), var(--border) var(--pct, 0%));
+}
+.scrub-range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 15px; height: 15px; border-radius: 50%;
+  background: var(--accent); border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(16, 40, 38, .25);
+}
+.scrub-range::-moz-range-thumb {
+  width: 15px; height: 15px; border-radius: 50%;
+  background: var(--accent); border: 2px solid #fff;
+}
+.scrub-range:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 4px; }
+
+.scrub-frame {
+  flex: none; min-width: 96px; text-align: right;
+  font-size: 12.5px; font-variant-numeric: tabular-nums; color: var(--text-mute);
+}
+
+/* A cell with no source result. Filling it with another clip would misrepresent that method. */
+.tile.is-missing .tile-media {
+  display: grid; place-items: center;
+  background: var(--surface); border-style: dashed; border-color: #CBDAD8;
+}
+.tile.is-missing .tile-media span { font-size: 12.5px; color: var(--text-mute); }
+.tile.is-missing figcaption { color: var(--text-mute); }
+
+/* Flag the side that falls apart after distillation. */
+.tile.is-warn .tile-media { border-color: #E7B4AE; box-shadow: 0 0 0 2px #FBECEA; }
+.tile.is-warn figcaption { color: #B4342A; font-weight: 650; }
+
+/* --------------------------------------------------------- charts ------ */
+
+.charts { margin-top: 24px; }
+
+.chart-legend {
+  display: flex; flex-wrap: wrap; gap: 8px 22px;
+  margin-bottom: 20px;
+  font-size: 15px; color: var(--text-soft);
+}
+.chart-legend-item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* Colour is the model, line style is RETA. The legend swatches follow the same rule. */
+.chart-swatch {
+  width: 20px; height: 3px; border-radius: 2px; flex: none;
+  background: var(--c);
+}
+.chart-swatch.is-dashed {
+  height: 0; background: none;
+  border-top: 3px dashed var(--c);
+}
+
+.chart-grid {
+  display: grid; gap: 20px 22px;
+  grid-template-columns: repeat(3, 1fr);
+}
+.chart-col { display: flex; flex-direction: column; gap: 16px; }
+
+.chart {
+  margin: 0; padding: 12px 12px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: 12px;
+}
+.chart:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+.chart figcaption {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  margin-bottom: 2px;
+}
+.chart-name { font-size: 14px; font-weight: 650; color: var(--text); }
+.chart-dir  { font-size: 11.5px; color: var(--text-mute); white-space: nowrap; }
+
+.chart--wide { padding: 14px 16px 10px; }
+.chart-endlabel { font-size: 11.5px; font-weight: 600; }
+
+/* Runtime chart - names on the left, values labelled directly beside each bar.
+   With nine rows of text, a shrinking viewBox makes the names unreadable (~4.6px at 390px),
+   so on narrow screens the chart scrolls inside itself, the same way the table does. */
+.chart--runtime .chart-plot { overflow-x: auto; }
+.chart--runtime .chart-plot svg { min-width: 620px; }
+.rt-name  { font-size: 13px; fill: var(--text-soft); }
+.rt-value { font-size: 12.5px; font-weight: 650; fill: var(--text-soft); }
+.rt-name.is-ours, .rt-value.is-ours { fill: var(--accent-ink); font-weight: 700; }
+
+/* How curvature is defined - the footnote under the chart. */
+.chart-note {
+  margin: 12px 0 0; max-width: 760px;
+  font-size: 13px; line-height: 1.6; color: var(--text-mute);
+}
+.chart-formula {
+  font-family: var(--font-mono); font-size: 12.5px;
+  color: var(--text-soft); white-space: nowrap;
+}
+/* The formula cannot wrap. On narrow screens it takes its own line and scrolls within it. */
+@media (max-width: 640px) {
+  .chart-formula:first-child {
+    display: block; margin-bottom: 6px;
+    max-width: 100%; overflow-x: auto;
+  }
+}
+
+.chart-plot { position: relative; }
+.chart-plot svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart-tick { font-size: 9.5px; fill: var(--text-mute); font-variant-numeric: tabular-nums; }
+.chart-axis { font-size: 9.5px; fill: var(--text-mute); }
+
+.chart-tip {
+  position: absolute; top: 0; left: 0;
+  padding: 8px 10px; border-radius: 9px;
+  background: var(--surface);
+  border: 1px solid var(--border); box-shadow: var(--shadow-2);
+  font-size: 12px; line-height: 1.45;
+  pointer-events: none; white-space: nowrap; z-index: 3;
+}
+.chart-tip[hidden] { display: none; }
+.chart-tip-head { font-weight: 700; margin-bottom: 4px; color: var(--text); }
+.chart-tip-row { display: flex; align-items: center; gap: 8px; }
+.chart-tip-label { color: var(--text-soft); }
+.chart-tip-val { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--text); font-weight: 650; }
+
+/* --------------------------------------------- trajectory explorer ---- */
+
+.traj { margin-top: 28px; }
+
+.tile-grid--trio {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Only two cells, input and result - it fills the section width like the other grids. */
+.tile-grid--pair {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.picker { margin-top: 24px; }
+
+/* Ten trajectories. They sit on one line when there is room and wrap when there is not.
+   With nowrap plus horizontal scroll, the end chips hide clipped between 1024 and 768px. */
+.chip-row {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+}
+
+.chip {
+  flex: none; white-space: nowrap;
+  padding: 7px 13px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-soft);
+  font: inherit; font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  transition: color .15s var(--ease), background-color .15s var(--ease),
+              border-color .15s var(--ease);
+}
+.chip:hover { color: var(--text); border-color: var(--accent); }
+.chip.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+
+/* Scene buttons in this section show the first frame only, with no name. */
+.traj .scene-tabs { margin-top: 0; gap: 10px; }
+.traj .scene-tab img { width: 112px; height: 65px; }
+
+/* ------------------------------------------------------------ bibtex ---- */
+
+.bibtex-card {
+  position: relative;
+  margin-top: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px;
+  overflow: hidden;
+}
+.bibtex-card pre {
+  margin: 0; padding: 22px;
+  overflow-x: auto;
+  font-family: var(--font-mono); font-size: 13.5px; line-height: 1.7;
+  color: var(--text-soft);
+}
+.copy-btn {
+  position: absolute; top: 12px; right: 12px;
+  padding: 5px 12px; border-radius: 7px;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text-soft); font: inherit; font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  transition: color .16s var(--ease), border-color .16s var(--ease);
+}
+.copy-btn:hover { color: var(--accent-ink); border-color: var(--accent); }
+.copy-btn.is-done { color: var(--accent-ink); border-color: var(--accent); }
+
+/* ------------------------------------------------------------ footer ---- */
+
+.foot {
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.foot-inner {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px;
+  justify-content: space-between;
+}
+.foot-logo img { height: 30px; width: auto; }
+.foot-note { margin: 0; font-size: 14px; color: var(--text-mute); }
+
+/* ------------------------------------------------------ scroll reveal --- */
+
+/* Hidden only when JS is present, so the content still shows if the script dies. */
+.has-js .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .5s var(--ease), transform .5s var(--ease);
+}
+.has-js .reveal.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .has-js .reveal { opacity: 1; transform: none; transition: none; }
+  .btn:hover { transform: none; }
+}
+
+/* ------------------------------------------------------------ mobile ---- */
+
+@media (max-width: 1000px) {
+  .tile-grid { grid-template-columns: repeat(2, 1fr); }
+  .tile-grid--trio { grid-template-columns: repeat(3, 1fr); }
+  .chart-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 700px) {
+  .chart-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 1000px) {
+  .impact-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .impact-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 700px) {
+  /* Give fingers something to hit (35px default -> 40px). */
+  .chip { font-size: 13.5px; padding: 9px 13px; }
+
+  .scene-tabs { gap: 8px; }
+  .scene-tab img { width: 108px; height: 62px; }
+  .traj .scene-tab img { width: 96px; height: 55px; }
+  .scene-tab-label { font-size: 12px; padding: 14px 6px 5px; }
+
+  .tile figcaption { font-size: 12.5px; }
+  .stage-status { font-size: 13px; }
+}
+
+@media (max-width: 560px) {
+  .tile-grid { grid-template-columns: 1fr; }
+  .tile-grid--pair, .tile-grid--trio { grid-template-columns: 1fr; }
+  .scene-tab { transform: none; }
+  .scene-tab:hover { transform: none; }
+}
+
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  /* Holding one line at this width would shrink the text past readability. */
+  .hero-sub { white-space: normal; font-size: 16px; max-width: 420px; }
+  /* On narrow screens drop the wordmark and keep just the bolt. */
+  .nav-brand span { display: none; }
+  /* Many items means horizontal scrolling; fade the right edge to signal there is more. */
+  .nav-links {
+    margin-left: auto;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+            mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+  }
+  .nav-links a { padding: 6px 9px; font-size: 13.5px; }
+  .authors { gap: 4px 14px; font-size: 16px; }
+  .btn { height: 40px; padding: 0 15px; font-size: 14px; }
+  .foot-inner { justify-content: center; text-align: center; }
+}
