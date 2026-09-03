@@ -1,0 +1,12 @@
+*__pycache__
+*.egg-info
+*.ckpt
+*.safetensors
+*.so
+.vscode
+models/PAI
+wandb
+result*/
+vis*
+logs
+slurm*

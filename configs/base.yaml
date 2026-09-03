@@ -1,0 +1,83 @@
+# general setting
+dataset_path: # TODO: use your own path.
+meta_path: dataset/metadata.csv
+blip_path: Salesforce/blip2-opt-2.7b
+model_path: PAI/Wan2.1-Fun-V1.1-1.3B-Control-Camera
+output_path: models
+dataloader_num_workers: 4
+
+wandb:
+  disabled: true  # TODO: false if you want to use wandb
+  project_name: FlashRender
+  wandb_api_key: # TODO: use your private key.
+
+extract:  # for extract_features.py
+  batch_size: 1
+  num_frames: 81
+  reverse: false
+  height: 480
+  width: 832
+
+train:
+  batch_size: 1
+  steps_per_epoch: 1000
+  max_epochs: 20
+  lr: 1e-4
+  max_timestep_boundary: 1
+  min_timestep_boundary: 0
+  use_align: true
+  alignment_layer_index: 8
+  align_loss_weight: 0.1
+
+meanflow:
+  resume_checkpoint: models/checkpoints/epoch_20.safetensors
+  max_epochs: 20
+  lr: 3e-5
+
+onpolicy:
+  max_epochs: 5 
+  teacher_checkpoint: models/checkpoints/epoch_20.safetensors
+  student_checkpoint: models/checkpoints/meanflow_epoch_20.safetensors
+  num_inference_steps_list: [4]
+  whole_chain_grad: true        # backprop KL grad through the whole s-step unroll (false = final step only)
+  dmd_weight: 1.0               # weight of the on-policy VSD/DMD loss
+  guidance_scale: 5.0           # teacher (real score) CFG scale; null to disable
+  student_update_freq: 5        # student XOR fake each iter: student on iter%freq==0, fake otherwise. Use >=2 (1 = student only, critic never trains).
+  sigma_shift: 5.0              # shifted timestep distribution for the VSD noise level
+  min_sigma: 0.001
+  max_sigma: 0.999
+  student_lr: 1.0e-5
+  fake_score_lr: 1.0e-5
+  grad_clip: 1.0                # max-norm gradient clipping (0 disables)
+  # GAN: discriminator on frozen-teacher block features, trained on the fake-score (critic)
+  gan_loss_weight_gen: 0.03     # weight of the GAN generator loss (0 = GAN off, no discriminator)
+  gan_use_same_t_noise: true    # share (sigma, eps) between real and fake for the discriminator
+  gan_r1_reg_weight: 0.01       # approximate-R1 regularization weight (0 disables)
+  gan_r1_reg_alpha: 0.1         # R1 perturbation scale
+  feature_indices: [15, 22, 29] # teacher DiT block indices feeding the discriminator
+  disc_type: dit_simple_conv3d  # Discriminator_VideoDiT architecture key
+  discriminator_lr: 1.0e-5
+
+eval:  # for eval.py
+  ckpt_path: models/checkpoints/onpolicy_epoch_5.safetensors
+  video_path: example_data/bear # Or, you can directly use a .mp4 file.
+  negative_prompt: 色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，整体发灰，最差质量，低质量，JPEG压缩残留，丑陋的，残缺的，多余的手指，画得不好的手部，画得不好的脸部，畸形的，毁容的，形态畸形的肢体，手指融合，静止不动的画面，杂乱的背景，三条腿，背景人很多，倒着走
+  camera_path: dataset/camera_extrinsics.json
+  cam_type: 1
+  cam_speed: 1
+  height: 480
+  width: 832
+  num_inference_steps: 4
+  inference_mode: any  # any: flow map, mul: multi-step CFG
+  output_dir: results
+  clamp_frames: false  # if true: only use the first 81 frames
+
+defaults:
+  - _self_
+  - override hydra/job_logging: disabled
+  - override hydra/hydra_logging: disabled
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
