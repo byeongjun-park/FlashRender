@@ -17,7 +17,7 @@ from lightning.pytorch.strategies import DDPStrategy
 from einops import rearrange
 
 from diffsynth.pipelines.wan_video_new import WanVideoPipeline, ModelConfig
-from flashrender_utils.model_utils import adjust_to_FlashRender
+from flashrender_utils.model_utils import adjust_to_FlashRender, keep_flashrender_modules_fp32
 from flashrender_utils.dmd2_utils import (
     variational_score_distillation_loss,
     gan_loss_generator,
@@ -58,6 +58,7 @@ class OnPolicyModule(pl.LightningModule):
         self.pipe.scheduler.set_timesteps(1000, training=True)
 
         student = adjust_to_FlashRender(getattr(self.pipe, "dit"), cfg, training=False).to(torch.bfloat16)
+        keep_flashrender_modules_fp32(student)
         setattr(self.pipe, "dit", student)
 
         self.pipe.freeze_except([])

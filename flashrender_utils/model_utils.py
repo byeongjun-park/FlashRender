@@ -7,6 +7,21 @@ from scipy.spatial.transform import Rotation as R
 from flashrender_utils.vggt_alignment_loss import VGGTAlignmentLoss
 from copy import deepcopy
 
+_FLASHRENDER_NEW_PARAMS = (
+    "rel_pose_embedding", "rope_phase_qk", "rope_phase_vo",
+    "rel_pose_src_token", "rel_pose_tgt_token", 'time_embedding_r'
+)
+
+
+def keep_flashrender_modules_fp32(model):
+    torch.set_autocast_cache_enabled(False)
+    n = 0
+    for name, param in model.named_parameters():
+        if any(k in name for k in _FLASHRENDER_NEW_PARAMS):
+            param.data = param.data.float()
+            n += param.numel()
+    return n
+
 
 def adjust_to_FlashRender(model, cfg, training=True):
     dim = model.dim

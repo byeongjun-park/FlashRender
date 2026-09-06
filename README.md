@@ -3,7 +3,9 @@
 # ⚡ FlashRender ⚡
 ### Few-Step Generative Rendering via Camera-Controlled Video MeanFlow
 
-<a href="https://arxiv.org/abs/26xx.xxxxx"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-26xx.xxxxx-b31b1b.svg"></a>
+[Byeongjun Park](https://byeongjun-park.github.io/) &nbsp;·&nbsp; [Byung-Hoon Kim](https://naipl.cc/) &nbsp;·&nbsp; [Hyungjin Chung](https://hyungjin-chung.github.io/)
+
+<a href="https://arxiv.org/abs/2609.03563"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2609.03563-b31b1b.svg"></a>
 <a href="https://byeongjun-park.github.io/FlashRender/"><img alt="Project Page" src="https://img.shields.io/badge/Project%20Page-online-brightgreen"></a>
 <a href="https://huggingface.co/byeongjun-park/FlashRender"><img alt="HuggingFace" src="https://img.shields.io/badge/🤗%20HuggingFace-model-blue"></a>
 <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-lightgrey.svg"></a>
@@ -38,6 +40,7 @@
 - [Setup](#-setup)
 - [Training](#-training)
 - [Inference and Evaluation](#-inference-and-evaluation)
+- [Acknowledgement](#-acknowledgement)
 - [Citation](#-citation)
 - [License](#-license)
 
@@ -142,12 +145,29 @@ FlashRender retakes an input video from a target camera trajectory in **4-NFE** 
    python evaluate.py --data_path results/bear/onpolicy_epoch5_4NFE_cam1.mp4
    ```
 
+## 🙏 Acknowledgement
+
+This project builds on the following excellent works. Many thanks to the authors for releasing their code.
+
+- [ReDirector](https://github.com/byeongjun-park/ReDirector): Creating Any-Length Video Retakes with Rotary Camera Encoding
+- [ReCamMaster](https://github.com/KlingAIResearch/ReCamMaster): Camera-Controlled Generative Rendering from A Single Video
+- [REPA](https://github.com/sihyun-yu/REPA): Representation Alignment for Generation
+- [VGGT](https://github.com/facebookresearch/vggt): Visual Geometry Grounded Transformer
+- [Improved MeanFlow](https://github.com/Lyy-iiis/imeanflow): On the Challenges of Fastforward Generative Models
+- [AnyFlow](https://github.com/NVlabs/AnyFlow): Any-Step Video Diffusion Model with On-Policy Flow Map Distillation
+- [FastGen](https://github.com/NVlabs/FastGen): Fast Generation from Diffusion Models
+
 ## 📚 Citation
 
 If you find this repository helpful for your project, please consider citing our work. :)
 
 ```bibtex
-
+@article{park2026flashrender,
+  title={FlashRender: Few-Step Generative Rendering via Camera-Controlled Video MeanFlow},
+  author={Park, Byeongjun and Kim, Byung-Hoon and Chung, Hyungjin},
+  journal={arXiv preprint arXiv:2609.03563},
+  year={2026}
+}
 ```
 
 ## 📄 License
