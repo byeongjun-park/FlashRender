@@ -63,6 +63,7 @@ class OnPolicyModule(pl.LightningModule):
 
         self.pipe.freeze_except([])
         self._set_student_trainable(self.pipe.dit)
+        pristine_dit = deepcopy(self.pipe.dit)
 
         # --- Student init: flow-map pretrained checkpoint (falls back to the teacher ckpt). ---
         teacher_ckpt = self.op.teacher_checkpoint
@@ -77,13 +78,13 @@ class OnPolicyModule(pl.LightningModule):
               f"loaded {len(student_state)}, missing={len(missing)}, unexpected={len(unexpected)}")
 
         # --- Teacher (real score): frozen MULTI-STEP model, queried as a denoiser (r=t). ---
-        self.teacher_dit = deepcopy(self.pipe.dit).to(torch.bfloat16)
+        self.teacher_dit = deepcopy(pristine_dit).to(torch.bfloat16)
         teacher_state = load_file(teacher_ckpt)
         self.teacher_dit.load_state_dict(teacher_state, strict=False)
         self.teacher_dit.eval().requires_grad_(False)
         print(f"[OnPolicy] teacher (real score) from {teacher_ckpt}: loaded {len(teacher_state)}")
 
-        self.fake_dit = deepcopy(self.pipe.dit).to(torch.bfloat16)
+        self.fake_dit = pristine_dit.to(torch.bfloat16)
         self.fake_dit.load_state_dict(teacher_state, strict=False)   # teacher init (NOT the student)
         self.fake_dit.requires_grad_(False)
         self._set_student_trainable(self.fake_dit, keywords=_STAGE1_TRAINABLE_KEYWORDS)
